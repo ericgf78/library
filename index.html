@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Loki's-Library</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div id="layout">
+        <div id="header">Loki's Library</div>
+        <div id="content">
+            <div id="grid">
+            </div>
+            <dialog closedby="none" id="formPanel">
+                <h3>Please enter details of your book.</h2>
+                <form action="" id="add-book-form" novalidate>
+                <div class="title-row">
+                    <label for="book_title">Book Title:</label>
+                    <input type="text" id="book_title" required>
+                </div>
+                <div class="author-row">
+                    <label for="book_author">Author:</label>
+                    <input type="text" id="book_author" required>
+                </div>
+                <div class="pages-row">
+                    <label for="book_pages">Number of Pages:</label>
+                    <input type="text" id="book_pages" required>
+                </div>
+                <div class="thumbnail-row">
+                    <label for="book_thumbnail">Thumbnail Link:</label>
+                    <input type="text" id="book_thumbnail" required>
+                </div>
+                <div class="read-row">
+                    <label for="book_read">Read:</label>
+                    <input type="checkbox" id="book_read" required>
+                </div>
+                <button id="confirmButton">Add book</button>
+                </form>
+            </dialog>
+        </div>
+        <div id="footer">
+            <button id="addButton">+</button>
+        </div>
+    </div>    
+</body>
+<script src="script.js" defer></script>
+</html>
