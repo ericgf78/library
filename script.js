@@ -3,7 +3,7 @@ const addButton = document.querySelector("#addButton");
 const dialog = document.querySelector("#formPanel");
 const confirmBtn = document.querySelector("#confirmButton");
 const grid = document.querySelector("#grid");
-const imageUrl = document.getElementById('book_thumbnail').value;
+const imageUrl = document.getElementById("book_thumbnail").value;
 
 function Book(id, title, author, pages, thumb, check) {
   if (!new.target) {
@@ -15,22 +15,36 @@ function Book(id, title, author, pages, thumb, check) {
   this.pages = pages;
   this.thumb = thumb;
   this.check = check;
-  this.info = function() {
+  this.info = function () {
     const description = title + " by: " + author + ", " + pages + " pages.";
-    return description;   
-  }
+    return description;
+  };
 }
 
 function addBookToLibrary() {
-  const list = Array.from(document.querySelector("#add-book-form").children).map(d => {
-  const item = d.getElementsByTagName('input')[0]
-  if (item?.type === "text") return [item.id, item.value]
-  else if (item?.type === "checkbox") return [item.id, item.checked]
-  return ['', '']
-})
+  const list = Array.from(
+    document.querySelector("#add-book-form").children,
+  ).map((d) => {
+    const item = d.getElementsByTagName("input")[0];
+    if (item?.type === "text") return [item.id, item.value];
+    else if (item?.type === "checkbox") return [item.id, item.checked];
+    return ["", ""];
+  });
   console.log(myLibrary);
-  const book = new Book(crypto.randomUUID(), list[0][1], list[1][1], list[2][1], list[3][1], list[4][1])
+  const book = new Book(
+    crypto.randomUUID(),
+    list[0][1],
+    list[1][1],
+    list[2][1],
+    list[3][1],
+    list[4][1],
+  );
   myLibrary.push(book);
+}
+
+function displayLibrary() {
+  createCard();
+  console.log(myLibrary);
 }
 
 function deleteCard(cardId) {
@@ -39,6 +53,32 @@ function deleteCard(cardId) {
   for (var i = 0; i < myLibrary.length; i++) {
     if (myLibrary[i].id === cardId) {
       myLibrary.splice(i, 1);
+    }
+  }
+}
+function buttonSwitch(bookById, readButton) {
+  const card = myLibrary.find((item) => {
+    return item.id === bookById;
+  });
+  const conditional = card.check;
+
+  if (conditional === true) {
+    readButton.textContent = "Not Read";
+    readButton.classList.remove("read-text");
+    readButton.classList.add("not-read");
+    for (var i = 0; i < myLibrary.length; i++) {
+      if (bookById === myLibrary[i].id) {
+        myLibrary[i].check = false;
+      }
+    }
+  } else {
+    readButton.textContent = "Read";
+    readButton.classList.remove("not-read");
+    readButton.classList.add("read-text");
+    for (var i = 0; i < myLibrary.length; i++) {
+      if (bookById === myLibrary[i].id) {
+        myLibrary[i].check = true;
+      }
     }
   }
 }
@@ -53,9 +93,9 @@ function createCard() {
   const author = document.createElement("div");
   const pages = document.createElement("div");
   const thumb = document.createElement("img");
-  infoContainer.classList.add('info-container');
-  card.appendChild(infoContainer)
-  thumb.src = myLibrary.at(-1).thumb
+  infoContainer.classList.add("info-container");
+  card.appendChild(infoContainer);
+  thumb.src = myLibrary.at(-1).thumb;
   title.textContent = "Title: " + myLibrary.at(-1).title;
   author.textContent = "Author: " + myLibrary.at(-1).author;
   pages.textContent = "Pages: " + myLibrary.at(-1).pages;
@@ -66,44 +106,46 @@ function createCard() {
   infoContainer.appendChild(pages);
   const isChecked = myLibrary.at(-1).check;
   if (isChecked === true) {
-    const read = document.createElement("div");
+    const read = document.createElement("button");
     read.textContent = "Read";
-    read.classList.add('read-text');
+    read.classList.add("read-text");
     infoContainer.appendChild(read);
-  }
-  else {
-    const notRead = document.createElement("div");
+    read.addEventListener("click", (e) => {
+      const parentOfParent = e.target.parentNode.parentNode.id;
+      buttonSwitch(parentOfParent, read);
+      console.log(myLibrary);
+    });
+  } else {
+    const notRead = document.createElement("button");
     notRead.textContent = "Not Read";
-    notRead.classList.add('not-read');
+    notRead.classList.add("not-read");
     infoContainer.appendChild(notRead);
-    console.log(myLibrary.check);
+    notRead.addEventListener("click", (e) => {
+      const parentOfParent = e.target.parentNode.parentNode.id;
+      buttonSwitch(parentOfParent, notRead);
+      console.log(myLibrary);
+    });
   }
-  const iconContainer = document.createElement('div');
+  const iconContainer = document.createElement("div");
   card.appendChild(iconContainer);
-  iconContainer.classList.add('icon-container');
-  const deleteIcon = document.createElement('span');
-  deleteIcon.className = 'mdi mdi-delete';
+  iconContainer.classList.add("icon-container");
+  const deleteIcon = document.createElement("span");
+  deleteIcon.className = "mdi mdi-delete";
   iconContainer.appendChild(deleteIcon);
-  deleteIcon.addEventListener('click', (e) => {
+  deleteIcon.addEventListener("click", (e) => {
     const parentId = e.target.parentNode.parentNode.id;
     deleteCard(parentId);
     console.log(myLibrary);
   });
 }
 
-function displayLibrary() {
-  createCard();
-  console.log(myLibrary);
-}
-
-addButton.addEventListener('click', () => {
+addButton.addEventListener("click", () => {
   dialog.showModal();
 });
 
-confirmBtn.addEventListener('click', (e) => {
+confirmBtn.addEventListener("click", (e) => {
   e.preventDefault();
   addBookToLibrary();
   displayLibrary();
   dialog.close();
 });
-
